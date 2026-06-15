@@ -1,5 +1,6 @@
-const BASE_URL = '/api/items';
-const AUTH_URL = '/api/auth';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+const BASE_URL = `${API_BASE}/api/items`;
+const AUTH_URL = `${API_BASE}/api/auth`;
 
 function authHeaders() {
     const token = localStorage.getItem('sp_token');
