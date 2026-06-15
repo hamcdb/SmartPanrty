@@ -1,4 +1,18 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+function resolveApiBase() {
+    const configuredBase = (import.meta.env.VITE_API_BASE_URL || '').trim();
+    if (configuredBase) return configuredBase.replace(/\/+$/, '');
+
+    // Local dev can use Vite proxy with relative /api paths.
+    const host = typeof window !== 'undefined' ? window.location.hostname : '';
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+    if (isLocalHost) return '';
+
+    throw new Error(
+        'Missing VITE_API_BASE_URL for production deployment. Set it to your deployed backend URL.'
+    );
+}
+
+const API_BASE = resolveApiBase();
 const BASE_URL = `${API_BASE}/api/items`;
 const AUTH_URL = `${API_BASE}/api/auth`;
 
